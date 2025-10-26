@@ -1,0 +1,132 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "togglr-backend.fullname" . }}
+  labels:
+    {{- include "togglr-backend.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "togglr-backend.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "togglr-backend.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "togglr-backend.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.config.server.port }}
+              protocol: TCP
+            - name: management
+              containerPort: 9090
+              protocol: TCP
+          env:
+            - name: SERVER_PORT
+              value: {{ .Values.config.server.port | quote }}
+            - name: DB_URL
+              value: {{ .Values.config.database.url | quote }}
+            - name: DB_USERNAME
+              {{- if .Values.config.database.existingSecret }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.database.existingSecret }}
+                  key: {{ .Values.config.database.usernameKey }}
+              {{- else }}
+              value: {{ .Values.config.database.username | quote }}
+              {{- end }}
+            - name: DB_PASSWORD
+              {{- if .Values.config.database.existingSecret }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.database.existingSecret }}
+                  key: {{ .Values.config.database.passwordKey }}
+              {{- else }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "togglr-backend.fullname" . }}-secret
+                  key: db-password
+              {{- end }}
+            - name: CACHE_TYPE
+              value: {{ .Values.config.cache.type | quote }}
+            {{- if eq .Values.config.cache.type "redis" }}
+            - name: REDIS_HOST
+              value: {{ .Values.config.cache.redis.host | quote }}
+            - name: REDIS_PORT
+              value: {{ .Values.config.cache.redis.port | quote }}
+            - name: REDIS_PASSWORD
+              {{- if .Values.config.cache.redis.existingSecret }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.cache.redis.existingSecret }}
+                  key: {{ .Values.config.cache.redis.passwordKey }}
+              {{- else }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "togglr-backend.fullname" . }}-secret
+                  key: redis-password
+              {{- end }}
+            {{- end }}
+            - name: JWT_SECRET
+              {{- if .Values.config.jwt.existingSecret }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.config.jwt.existingSecret }}
+                  key: {{ .Values.config.jwt.secretKey }}
+              {{- else }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "togglr-backend.fullname" . }}-secret
+                  key: jwt-secret
+              {{- end }}
+            - name: JWT_EXPIRATION
+              value: {{ .Values.config.jwt.expiration | toString | quote }}
+            - name: LOG_LEVEL
+              value: {{ .Values.config.logging.level | quote }}
+            - name: SECURITY_LOG_LEVEL
+              value: {{ .Values.config.logging.securityLevel | quote }}
+          {{- if .Values.healthCheck.enabled }}
+          livenessProbe:
+            {{- toYaml .Values.healthCheck.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.healthCheck.readinessProbe | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

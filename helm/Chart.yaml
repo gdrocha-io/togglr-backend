@@ -1,0 +1,11 @@
+apiVersion: v2
+name: togglr-backend
+description: A Helm chart for Togglr Feature Toggle Management System Backend
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - feature-toggle
+  - feature-flag
+  - java
+  - spring-boot
