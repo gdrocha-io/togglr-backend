@@ -8,7 +8,7 @@ Togglr
 
 [![Build Status](https://github.com/gdrocha-io/togglr-backend/workflows/CI/badge.svg)](https://github.com/gdrocha-io/togglr-backend/actions)
 [![Docker Pulls](https://img.shields.io/docker/pulls/gdrocha/togglr-backend)](https://hub.docker.com/r/gdrocha/togglr-backend)
-[![Helm Chart](https://img.shields.io/badge/helm-chart-blue)](https://artifacthub.io/packages/helm/togglr/togglr-backend)
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/togglr)](https://artifacthub.io/packages/search?repo=togglr)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Java](https://img.shields.io/badge/java-17-orange.svg)](https://openjdk.java.net/projects/jdk/17/)
 [![Spring Boot](https://img.shields.io/badge/spring--boot-3.1.5-brightgreen.svg)](https://spring.io/projects/spring-boot)
