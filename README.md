@@ -83,6 +83,7 @@ export JWT_SECRET=your-secret-key
 - **Database**: PostgreSQL 12+
 - **Memory**: 512MB minimum, 1GB recommended
 - **Cache** (optional): Redis 6+
+- **Frontend** (optional): [Togglr Frontend](https://github.com/gdrocha-io/togglr-frontend) for web interface
 
 ## 🔧 Configuration
 
