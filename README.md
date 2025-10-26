@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Togglr Logo](logo.svg)
+![Togglr Logo](https://raw.githubusercontent.com/gdrocha-io/togglr-backend/main/logo.svg)
 
 **Modern Feature Toggle Management System**
 
