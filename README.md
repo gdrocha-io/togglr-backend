@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Togglr Logo](https://via.placeholder.com/200x80/2563eb/ffffff?text=TOGGLR)
+![Togglr Logo](logo.svg)
 
 **Modern Feature Toggle Management System**
 

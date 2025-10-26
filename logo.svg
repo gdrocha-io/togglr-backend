@@ -1,0 +1,16 @@
+<svg width="140" height="40" viewBox="0 0 140 40" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="140" height="40" fill="#1f2937" rx="8" />
+
+  <!-- Toggle Icon -->
+  <g transform="translate(12, 14)">
+    <!-- Track -->
+    <rect x="0" y="0" width="24" height="12" rx="6" fill="#10b981" stroke="#059669" stroke-width="1" />
+    <!-- Handle -->
+    <circle cx="18" cy="6" r="5" fill="#ffffff" stroke="#e5e7eb" stroke-width="1" />
+  </g>
+
+  <!-- Brand Text -->
+  <text x="50" y="26" font-family="system-ui, -apple-system, sans-serif" font-size="16"
+    font-weight="700" fill="#ffffff" letter-spacing="0.5px">TOGGLR</text>
+</svg>
